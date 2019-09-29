@@ -1,4 +1,4 @@
-package com.rolex.lynn.servlet;
+package com.rolex.lynn.filter;
 
 /**
  * @author rolex
@@ -6,6 +6,7 @@ package com.rolex.lynn.servlet;
  */
 
 import com.rolex.lynn.context.RequestContext;
+import com.rolex.lynn.servlet.ServletRunner;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;
@@ -14,11 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static sun.management.Agent.error;
 
 @Slf4j
 @WebFilter(urlPatterns = "/*")
-public class LynnServlet implements Filter {
+public class GenericFilter implements Filter {
     
     ServletRunner servletRunner;
     protected static final ThreadLocal<? extends RequestContext> threadLocal = new ThreadLocal<RequestContext>() {
@@ -26,7 +26,7 @@ public class LynnServlet implements Filter {
     
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        log.info("LynnServlet.init()");
+        log.info("GenericFilter.init()");
         servletRunner = new ServletRunner();
     }
     
@@ -57,7 +57,7 @@ public class LynnServlet implements Filter {
             threadLocal.remove();
         }
     }
-    
+
     @Override
     public void destroy() {
         log.info("LynnServlet.destroy()");
@@ -68,17 +68,21 @@ public class LynnServlet implements Filter {
     }
     
     private void pre() {
-        log.info("LynnServlet.init()");
+        log.info("GenericFilter.init()");
         servletRunner.pre();
     }
     
     private void routing() {
-        log.info("LynnServlet.routing()");
+        log.info("GenericFilter.routing()");
         servletRunner.routing();
     }
     
     private void post() {
-        log.info("LynnServlet.post()");
+        log.info("GenericFilter.post()");
         servletRunner.post();
+    }
+
+    private void error(Exception e) {
+        log.error("GenericFilter.error()");
     }
 }
