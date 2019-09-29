@@ -1,2 +1,2 @@
 # lynn
-gateway
+gateway based spring boot
