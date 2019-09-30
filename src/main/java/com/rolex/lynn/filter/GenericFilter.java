@@ -18,18 +18,26 @@ import java.io.IOException;
 
 @Slf4j
 @WebFilter(urlPatterns = "/*")
-public class GenericFilter implements Filter {
-    
+public abstract class GenericFilter implements Filter {
+
     ServletRunner servletRunner;
     protected static final ThreadLocal<? extends RequestContext> threadLocal = new ThreadLocal<RequestContext>() {
     };
-    
+
+   abstract public String filterType();
+
+    abstract public int filterOrder();
+
+    abstract boolean shouldFilter();
+
+    abstract Object run() throws Exception;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         log.info("GenericFilter.init()");
         servletRunner = new ServletRunner();
     }
-    
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         log.info("LynnServlet started");
@@ -62,21 +70,21 @@ public class GenericFilter implements Filter {
     public void destroy() {
         log.info("LynnServlet.destroy()");
     }
-    
+
     private void init(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
         servletRunner.init(servletRequest, servletResponse);
     }
-    
+
     private void pre() {
         log.info("GenericFilter.init()");
         servletRunner.pre();
     }
-    
+
     private void routing() {
         log.info("GenericFilter.routing()");
         servletRunner.routing();
     }
-    
+
     private void post() {
         log.info("GenericFilter.post()");
         servletRunner.post();
