@@ -13,20 +13,20 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2019
  */
 public class FilterLoader {
-
+    
     private final ConcurrentHashMap<String, List<GenericFilter>> filtersByType = new ConcurrentHashMap<>();
-
+    
     private static FilterLoader INSTANCE = new FilterLoader();
-
+    
     public static FilterLoader getInstance() {
         return INSTANCE;
     }
-
+    
     public List<GenericFilter> getFiltersByType(String filterType) {
         return filtersByType.get(filterType);
     }
-
-    public static void putFilter(String type, GenericFilter filter) {
+    
+    public void putFilter(String type, GenericFilter filter) {
         List<GenericFilter> list = INSTANCE.filtersByType.get(type);
         if (list == null) {
             List<GenericFilter> filters = new ArrayList<>();
@@ -35,5 +35,15 @@ public class FilterLoader {
         } else {
             INSTANCE.filtersByType.get(type).add(filter);
         }
+    }
+    
+    public List<GenericFilter> getAllFilters() {
+        List<GenericFilter> filters = new ArrayList<>();
+        for (List<GenericFilter> list : filtersByType.values()) {
+            for(GenericFilter filter : list){
+                filters.add(filter);
+            }
+        }
+        return filters;
     }
 }

@@ -3,9 +3,7 @@ package com.rolex.lynn.filter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 
-import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import java.io.IOException;
 
 /**
  * @author rolex
@@ -14,10 +12,25 @@ import java.io.IOException;
 @Order(1)
 @WebFilter(urlPatterns = "/*")
 @Slf4j
-public class PreFilter implements Filter {
+public class PreFilter extends GenericFilter{
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        log.info("PreFilter....");
-        filterChain.doFilter(servletRequest, servletResponse);
+    public String filterType() {
+        return "pre";
+    }
+    
+    @Override
+    public int filterOrder() {
+        return 0;
+    }
+    
+    @Override
+    boolean shouldFilter() {
+        return true;
+    }
+    
+    @Override
+    Object run() throws Exception {
+        log.info("PreFilter");
+        return null;
     }
 }
